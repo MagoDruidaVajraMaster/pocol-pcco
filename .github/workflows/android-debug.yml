@@ -13,14 +13,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      # Esta linha abaixo é o segredo: o próprio GitHub vai criar o motor agora
-      - name: Generate Gradle Wrapper
-        run: gradle wrapper --gradle-version 8.1.1
-
+      
+      # Desta vez usamos o Gradle que já vem instalado no GitHub (evita erros)
       - name: Build with Gradle
-        run: chmod +x gradlew && ./gradlew assembleDebug
-
+        run: gradle assembleDebug
+      
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
