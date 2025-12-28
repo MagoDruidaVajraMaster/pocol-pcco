@@ -1,25 +1,19 @@
-name: POCOL Build Debug
-on:
-  push:
-    branches: [ main, pocol/setup ]
-  workflow_dispatch:
+name: Build
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-      
-      # Desta vez usamos o Gradle que já vem instalado no GitHub (evita erros)
-      - name: Build with Gradle
-        run: gradle assembleDebug
-      
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: gradle/gradle-build-action@v2
         with:
-          name: pocol-debug-apk
+          gradle-version: 8.4
+      - run: gradle assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pocol-apk
           path: app/build/outputs/apk/debug/*.apk
